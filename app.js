@@ -25,16 +25,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 const port = 8080;
 const host = '0.0.0.0';
 
-async function generateImage(prompt) {
-  leap.usePublicModel("sd-1.5");
-  const result = await leap.generate.generateImage({
-    prompt: prompt,
-  });
-  if (result) {
-    return result.data.images[0].uri;
-  }
-}
-
 app.get('/', async (req, res) => {
   
   res.sendFile(path.join(__dirname+'/public/index.html'));
@@ -58,9 +48,17 @@ app.post('/generate', async (req, res) => {
       res.send(body);
   });
   console.log('after request sent')
-  
-  // res.send('Hello World from IBM Cloud Essentials!');
 })
+
+async function generateImage(prompt) {
+  leap.usePublicModel("sd-1.5");
+  const result = await leap.generate.generateImage({
+    prompt: prompt,
+  });
+  if (result) {
+    return result.data.images[0].uri;
+  }
+}
 
 app.listen(port, host);
 console.log(`Running on http://${host}:${port}`);
