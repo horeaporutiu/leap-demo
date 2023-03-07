@@ -1,8 +1,0 @@
----
-applications:
-- path: .
-  name: node-hello-world-example
-  buildpack: nodejs_buildpack
-  memory: 256M
-  instances: 1
-  random-route: true
