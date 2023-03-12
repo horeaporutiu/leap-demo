@@ -1,64 +1,45 @@
-'use strict';
-
 import { Leap } from '@leap-ai/sdk'
 import express from 'express'
-import request from 'request'
-import { fileURLToPath } from 'url';
-import path from 'path';
-import { dirname } from 'path';
-import bodyParser from 'body-parser';
-
-import * as dotenv from 'dotenv'
+import dotenv from 'dotenv'
 dotenv.config()
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const leap = new Leap(process.env.LEAP_API_KEY)
 
 const app = express();
-
 app.use(express.json());
-app.use(express.static("express"));
-app.use(bodyParser.urlencoded({extended: false}));
-
-const port = 8080;
-const host = '0.0.0.0';
-
-app.get('/', async (req, res) => {
-  
-  res.sendFile(path.join(__dirname+'/public/index.html'));
-  
-})
+app.use(express.static("public"));
+const port = 3000;
 
 app.post('/generate', async (req, res) => {
 
-  const prompt = req.body.prompt;
-  
-  let uri = await generateImage(prompt);
+	const prompt = req.body.prompt;
 
-  var requestSettings = {
-    url: uri,
-    method: 'GET',
-    encoding: null
-  };
+	try {
 
-  await request(requestSettings, function(error, response, body) {
-      res.set('Content-Type', 'image/png');
-      res.send(body);
-  });
-  console.log('after request sent')
+		//stable diffusion 1.5
+		leap.usePublicModel("sd-1.5");
+
+		//generate the image by passing in the prompt, using leap SDK
+		const response = await leap.generate.generateImage({
+			prompt: prompt,
+		});
+		const imageUrl = response.data.images[0].uri;
+
+		//send JSON response to front end, with the data being the image in this case
+		res.status(200).json({
+			success: true,
+			data: imageUrl
+		});
+
+	} catch (error) {
+		console.log(error)
+		//send error to front end, so user can easily see that something went wrong
+		res.status(400).json({
+			success: false,
+			error: 'The image could not be generated'
+		});
+	}
 })
 
-async function generateImage(prompt) {
-  leap.usePublicModel("sd-1.5");
-  const result = await leap.generate.generateImage({
-    prompt: prompt,
-  });
-  if (result) {
-    return result.data.images[0].uri;
-  }
-}
-
-app.listen(port, host);
-console.log(`Running on http://${host}:${port}`);
+app.listen(port);
+console.log(`Running on localhost:${port}` );

@@ -1,20 +1,42 @@
-<!doctype html>
-<html>
-  <head>
-    <title>This is the title of the webpage!</title>
-  </head>
-  <form action="/generate" method="post">
-    <label for="prompt">Prompt: </label><br>
-    <input type="text" id="promptInput" name="prompt"><br>
-    <br>
-    <input type="submit" value="Generate Image">
-  </form>
-  <div id='imgBlock'>
-  </div>
-  <!-- <script>
-    function myFunction() {
-      let input = document.getElementById("promptInput").value;
-      console.log(input)
-    }
-    </script> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<script src="js/main.js" defer></script>
+	<title>Leap.ai Image Generator</title>
+</head>
+
+<body>
+	<header>
+		<div class="navbar">
+			<div class="logo">
+				<h2>LeapAI Image Generator</h2>
+			</div>
+			<div class="nav-links">
+				<ul>
+					<li>
+						<a href="https://tryleap.ai" target="_blank">Leap AI Docs</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</header>
+
+	<div class="promptDiv">
+		<form id="imagePrompt">
+			<h2 id="ImagineAnImage">Imagine An Image</h2>
+			<input type="text" id="promptInput"><br>
+			<button class="generateButton" type="submit" class="btn">Generate</button>
+		</form>
+	</div>
+	<div class="image-container">
+		<h2 class="msg"></h2>
+		<img src="" alt="" id="image" />
+	</div>
+	<div class="spinner"></div>
+
+</body>
+
 </html>
