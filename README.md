@@ -4,7 +4,7 @@
 
 ## Add API Key
 
-Go to tryleap.ai and then click on `API Keys` and `Create API Key`.
+Go to https://tryleap.ai and then click on `API Keys` and `Create API Key`.
 
 Rename `.sample.env` to `.env` and add your API Key.
 
